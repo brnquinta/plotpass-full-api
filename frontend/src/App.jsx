@@ -10,6 +10,8 @@ import AboutPanel from "./components/main/components/panels/AboutPanel";
 import Login from "./components/register/login/Login";
 import Signup from "./components/register/signup/Signup";
 
+// teste commit
+
 function App() {
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("fight club");
