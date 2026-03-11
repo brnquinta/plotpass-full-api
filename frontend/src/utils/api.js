@@ -92,3 +92,14 @@ export function markRecommendationAsRead(token, recommendationId) {
     return res.json();
   });
 }
+
+export function updateUserProfile(token, data) {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then(handleResponse);
+}

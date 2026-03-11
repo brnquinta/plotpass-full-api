@@ -5,12 +5,14 @@ const {
   validateSignup,
   validateLogin,
   validateUserId,
+  validateUpdateUser,
 } = require("../middlewares/validator");
 
 const {
   getUsers,
   getUserById,
   getCurrentUser,
+  updateCurrentUser,
   createUser,
   login,
 } = require("../controllers/users");
@@ -21,5 +23,7 @@ router.post("/signin", validateLogin, login);
 router.get("/me", auth, getCurrentUser);
 router.get("/", auth, getUsers);
 router.get("/:id", auth, validateUserId, getUserById);
+
+router.patch("/me", auth, validateUpdateUser, updateCurrentUser);
 
 module.exports = router;

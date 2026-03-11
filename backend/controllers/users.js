@@ -3,26 +3,22 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = process.env;
 
-
-
-
 // GET /users
 module.exports.getUsers = async (req, res) => {
   try {
     const users = await User.find({});
-    res.send(users);
+    return res.send(users);
   } catch (err) {
-    res.status(500).send({ message: "Erro no servidor" });
+    return res.status(500).send({ message: "Erro no servidor" });
   }
 };
-
 
 // GET /users/:id
 module.exports.getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).orFail();
 
-    res.send(user);
+    return res.send(user);
   } catch (err) {
     if (err.name === "DocumentNotFoundError") {
       return res.status(404).send({ message: "Usuário não encontrado" });
@@ -37,11 +33,10 @@ module.exports.getUserById = async (req, res) => {
 };
 
 // GET /users/me
-
 module.exports.getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).orFail();
-    res.send(user);
+    return res.send(user);
   } catch (err) {
     if (err.name === "DocumentNotFoundError") {
       return res.status(404).send({ message: "Usuário não encontrado" });
@@ -51,6 +46,33 @@ module.exports.getCurrentUser = async (req, res) => {
   }
 };
 
+// PATCH /users/me
+module.exports.updateCurrentUser = async (req, res) => {
+  try {
+    const { name, avatar } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, avatar },
+      {
+        returnDocument: "after",
+        runValidators: true,
+      }
+    ).orFail();
+
+    return res.send(updatedUser);
+  } catch (err) {
+    if (err.name === "ValidationError") {
+      return res.status(400).send({ message: "Erro de validação" });
+    }
+
+    if (err.name === "DocumentNotFoundError") {
+      return res.status(404).send({ message: "Usuário não encontrado" });
+    }
+
+    return res.status(500).send({ message: "Erro no servidor" });
+  }
+};
 
 // POST /signup
 module.exports.createUser = async (req, res) => {
@@ -66,7 +88,7 @@ module.exports.createUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).send({
+    return res.status(201).send({
       _id: user._id,
       name: user.name,
       avatar: user.avatar,
@@ -83,7 +105,7 @@ module.exports.createUser = async (req, res) => {
 
     return res.status(500).send({ message: "Erro no servidor" });
   }
-}; 
+};
 
 // POST /signin
 module.exports.login = async (req, res) => {
@@ -104,7 +126,7 @@ module.exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { _id: user._id },
-      JWT_SECRET, 
+      JWT_SECRET,
       { expiresIn: "7d" }
     );
 
