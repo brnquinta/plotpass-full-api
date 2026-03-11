@@ -6,12 +6,10 @@ import PanelSearch from "./components/main/components/panels/PanelSearch";
 import RecommendationsPanel from "./components/main/components/panels/RecommendationsPanel";
 import SentRecommendationsPanel from "./components/main/components/panels/SentRecommendationsPanel";
 import AboutPanel from "./components/main/components/panels/AboutPanel";
-import MovieDetailsPage from "./components/main/components/panels/MovieDetailsPage"; // modificação: nova página de detalhes por ID
-
+import MovieDetailsPage from "./components/main/components/panels/MovieDetailsPage";
 import Login from "./components/register/login/Login";
 import Signup from "./components/register/signup/Signup";
-
-// teste commit
+import ProtectedRoute from "./components/protectedRouters/ProtectedRouters.jsx";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -26,7 +24,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("jwt");
     setSearch("");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -37,70 +35,80 @@ function App() {
       <Route
         path="/"
         element={
-          <Main
-            search={search}
-            onSearchChange={setSearch}
-            onSubmitSearch={handleSubmitSearch}
-            onLogout={handleLogout}
-          >
-            <PanelSearch movie={null} />
-          </Main>
+          <ProtectedRoute>
+            <Main
+              search={search}
+              onSearchChange={setSearch}
+              onSubmitSearch={handleSubmitSearch}
+              onLogout={handleLogout}
+            >
+              <PanelSearch movie={null} />
+            </Main>
+          </ProtectedRoute>
         }
       />
 
       <Route
         path="/movie/:movieId"
         element={
-          <Main
-            search={search}
-            onSearchChange={setSearch}
-            onSubmitSearch={handleSubmitSearch}
-            onLogout={handleLogout}
-          >
-            <MovieDetailsPage />
-          </Main>
+          <ProtectedRoute>
+            <Main
+              search={search}
+              onSearchChange={setSearch}
+              onSubmitSearch={handleSubmitSearch}
+              onLogout={handleLogout}
+            >
+              <MovieDetailsPage />
+            </Main>
+          </ProtectedRoute>
         }
       />
 
       <Route
         path="/recommended"
         element={
-          <Main
-            search={search}
-            onSearchChange={setSearch}
-            onSubmitSearch={handleSubmitSearch}
-            onLogout={handleLogout}
-          >
-            <RecommendationsPanel />
-          </Main>
+          <ProtectedRoute>
+            <Main
+              search={search}
+              onSearchChange={setSearch}
+              onSubmitSearch={handleSubmitSearch}
+              onLogout={handleLogout}
+            >
+              <RecommendationsPanel />
+            </Main>
+          </ProtectedRoute>
         }
       />
 
       <Route
         path="/sent"
         element={
-          <Main
-            search={search}
-            onSearchChange={setSearch}
-            onSubmitSearch={handleSubmitSearch}
-            onLogout={handleLogout}
-          >
-            <SentRecommendationsPanel />
-          </Main>
+          <ProtectedRoute>
+            <Main
+              search={search}
+              onSearchChange={setSearch}
+              onSubmitSearch={handleSubmitSearch}
+              onLogout={handleLogout}
+            >
+              <SentRecommendationsPanel />
+            </Main>
+          </ProtectedRoute>
         }
       />
 
       <Route
         path="/about"
         element={
-          <Main
-            search={search}
-            onSearchChange={setSearch}
-            onSubmitSearch={handleSubmitSearch}
-            onLogout={handleLogout}
-          >
-            <AboutPanel />
-          </Main>
+          <ProtectedRoute>
+            <Main
+              search={search}
+              onSearchChange={setSearch}
+              onSubmitSearch={handleSubmitSearch}
+              onLogout={handleLogout}
+            >
+              <AboutPanel />
+            </Main>
+          </ProtectedRoute>
         }
       />
 
