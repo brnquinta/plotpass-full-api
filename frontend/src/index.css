@@ -1,0 +1,13 @@
+@import url("./vendor/normalize.css");
+@import url("./blocks/header.css");
+@import url("./blocks/main.css");
+@import url("./blocks/panelSearch.css");
+@import url("./blocks/popup.css");
+@import url("./blocks/sendRecomendation.css");
+@import url("./blocks/recommendationsPanel.css");
+@import url("./blocks/sentRecomendationPanel.css");
+@import url("./blocks/aboutPanel.css");
+@import url("./blocks/register.css");
+@import url("./blocks/login.css");
+@import url("./blocks/signup.css");
+@import url("./blocks/searchAutoComplete.css");

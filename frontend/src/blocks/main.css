@@ -1,0 +1,164 @@
+/* Main.css */
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f6f8;
+  font-family: "Inter", sans-serif;
+}
+
+.sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  background-color: #314a6d;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 16px;
+  overflow: visible;
+  position: relative;
+  z-index: 20;
+}
+
+.sidebar__menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.sidebar__search-form {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  z-index: 30;
+}
+
+.sidebar__search {
+  flex: 1;
+  height: 36px;
+  min-width: 0;
+  padding: 0 12px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 8px;
+  background-color: #425877;
+  color: #fff;
+}
+
+.sidebar__search::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: "Inter", sans-serif;
+}
+
+.sidebar__search-button {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border: 1px solid #fff;
+  background-color: #4f688a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+  position: relative;
+  z-index: 3;
+}
+
+.sidebar__search-button:hover {
+  background-color: #5a78a0;
+}
+
+.sidebar__search-button img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar__menu > a {
+  display: block;
+  text-decoration: none;
+  background: none;
+  border: none;
+  color: #fff;
+  text-align: left;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar__menu > a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar__menu > a.is-active {
+  background-color: rgba(255, 255, 255, 0.18);
+  font-weight: 600;
+}
+
+.sidebar__menu > a:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+.sidebar__footer {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  font-family: "Inter", sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.main-content__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.recommend-button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #314a6d;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.recommend-button:hover {
+  background-color: #253a56;
+}
+
+.main-content__panel {
+  background-color: #fff;
+  box-shadow: 0px 3.2px 9.6px 0px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  border-radius: 8px;
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  position: relative;
+  z-index: 1;
+}
