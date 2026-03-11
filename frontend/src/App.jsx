@@ -6,6 +6,7 @@ import PanelSearch from "./components/main/components/panels/PanelSearch";
 import RecommendationsPanel from "./components/main/components/panels/RecommendationsPanel";
 import SentRecommendationsPanel from "./components/main/components/panels/SentRecommendationsPanel";
 import AboutPanel from "./components/main/components/panels/AboutPanel";
+import MovieDetailsPage from "./components/main/components/panels/MovieDetailsPage"; // modificação: nova página de detalhes por ID
 
 import Login from "./components/register/login/Login";
 import Signup from "./components/register/signup/Signup";
@@ -14,22 +15,19 @@ import Signup from "./components/register/signup/Signup";
 
 function App() {
   const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("fight club");
 
   const navigate = useNavigate();
 
   const handleSubmitSearch = (e) => {
     e.preventDefault();
-    setQuery(search.trim());
     navigate("/");
   };
 
-const handleLogout = () => {
-  localStorage.removeItem("jwt");
-  setSearch("");
-  setQuery("");
-  navigate("/login");
-};
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    setSearch("");
+    navigate("/login");
+  };
 
   return (
     <Routes>
@@ -39,12 +37,27 @@ const handleLogout = () => {
       <Route
         path="/"
         element={
-     <Main
-        search={search}
-        onSearchChange={setSearch}
-        onLogout={handleLogout}
-      >       
-            <PanelSearch query={query} />
+          <Main
+            search={search}
+            onSearchChange={setSearch}
+            onSubmitSearch={handleSubmitSearch}
+            onLogout={handleLogout}
+          >
+            <PanelSearch movie={null} />
+          </Main>
+        }
+      />
+
+      <Route
+        path="/movie/:movieId"
+        element={
+          <Main
+            search={search}
+            onSearchChange={setSearch}
+            onSubmitSearch={handleSubmitSearch}
+            onLogout={handleLogout}
+          >
+            <MovieDetailsPage />
           </Main>
         }
       />

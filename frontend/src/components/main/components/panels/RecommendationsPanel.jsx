@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getReceivedRecommendations, markRecommendationAsRead } from "../../../../utils/api";
-
+import { useNavigate } from "react-router-dom"; // modificação: navegação para abrir detalhes do filme
+import {
+  getReceivedRecommendations,
+  markRecommendationAsRead,
+} from "../../../../utils/api";
 
 function RecommendationsPanel() {
   const [recommendations, setRecommendations] = useState([]);
   const [page, setPage] = useState(1);
 
   const PAGE_SIZE = 5;
+  const navigate = useNavigate(); // modificação: hook de navegação
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt"); 
+    const token = localStorage.getItem("jwt");
     if (!token) {
       console.log("Token não encontrado");
       return;
@@ -18,7 +21,7 @@ function RecommendationsPanel() {
 
     getReceivedRecommendations(token)
       .then((data) => {
-        setRecommendations(data); 
+        setRecommendations(data);
       })
       .catch((err) => {
         console.log("Erro ao buscar recomendações:", err);
@@ -28,29 +31,36 @@ function RecommendationsPanel() {
   const visibleRecommendations = recommendations.slice(0, page * PAGE_SIZE);
   const hasMore = visibleRecommendations.length < recommendations.length;
 
-const toggleStatus = (id) => {
-  const token = localStorage.getItem("jwt");
+  const toggleStatus = (id) => {
+    const token = localStorage.getItem("jwt");
 
-  if (!token) {
-    console.log("Token não encontrado");
-    return;
-  }
+    if (!token) {
+      console.log("Token não encontrado");
+      return;
+    }
 
-  markRecommendationAsRead(token, id)
-    .then(() => {
-      setRecommendations((prevRecommendations) =>
-        prevRecommendations.map((rec) => {
-          if (rec._id !== id) return rec;
+    markRecommendationAsRead(token, id)
+      .then(() => {
+        setRecommendations((prevRecommendations) =>
+          prevRecommendations.map((rec) => {
+            if (rec._id !== id) return rec;
 
-          return {
-            ...rec,
-            status: "read",
-          };
-        })
-      );
-    })
-    .catch((err) => console.log("Erro ao marcar como lida:", err));
-};
+            return {
+              ...rec,
+              status: "read",
+            };
+          })
+        );
+      })
+      .catch((err) => console.log("Erro ao marcar como lida:", err));
+  };
+
+  const handleOpenMovieDetails = (movieId) => {
+    if (!movieId) return;
+
+    // modificação: abre diretamente a rota de detalhes usando o id salvo na recomendação
+    navigate(`/movie/${movieId}`);
+  };
 
   return (
     <section className="recommendations">
@@ -64,7 +74,7 @@ const toggleStatus = (id) => {
                 src={rec.fromUserId?.avatar}
                 alt={rec.fromUserId?.name || "avatar"}
                 className="recommendations__avatar-circle"
-              /> {/* avatar de quem indicou */}
+              />
             </div>
 
             <div className="recommendations__info">
@@ -79,7 +89,7 @@ const toggleStatus = (id) => {
 
             <div className="recommendations__movie">
               <p className="recommendations__movie-title">
-                título: <strong>{rec.movie?.title}</strong>
+                Título: <strong>{rec.movie?.title}</strong>
               </p>
 
               <p className="recommendations__rating">
@@ -96,6 +106,14 @@ const toggleStatus = (id) => {
                 onClick={() => toggleStatus(rec._id)}
               >
                 {rec.status === "read" ? "Assistido" : "Pendente"}
+              </button>
+
+              <button
+                type="button"
+                className="recommendations__view-btn"
+                onClick={() => handleOpenMovieDetails(rec.movie?.id)}
+              >
+                Ver detalhes
               </button>
             </div>
           </div>

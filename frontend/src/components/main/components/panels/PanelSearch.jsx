@@ -1,27 +1,25 @@
 import posterIndisponivel from "../../../../images/posterIndisponivel.png";
 import panelSearchImage from "../../../../images/panelSearchImage.jpg";
 
-
 function PanelSearch({ movie }) {
-
-
- if (!movie) {
-  return (
-    <div className="panel-search__empty-wrapper">
-      <img
-        className="panel-search__empty-image"
-        src={panelSearchImage}
-        alt="Buscar filme"
-      />
-      <div className="panel-search__empty">
-        Digite um filme e pesquise.
+  if (!movie) {
+    return (
+      <div className="panel-search__empty-wrapper">
+        <img
+          className="panel-search__empty-image"
+          src={panelSearchImage}
+          alt="Buscar filme"
+        />
+        <div className="panel-search__empty">
+          Digite um filme e pesquise.
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+
   const posterUrl = movie.poster_path
     ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-   : posterIndisponivel;
+    : posterIndisponivel;
 
   const year = movie.release_date
     ? movie.release_date.slice(0, 4)
@@ -35,7 +33,6 @@ function PanelSearch({ movie }) {
     <section className="panel-search">
       <div className="panel-search__card">
         <div className="panel-search__grid">
-          
           <div className="panel-search__poster">
             {posterUrl && <img src={posterUrl} alt={movie.title} />}
           </div>
@@ -73,7 +70,6 @@ function PanelSearch({ movie }) {
           </div>
 
           <div className="panel-search__right-bottom" />
-
         </div>
       </div>
     </section>

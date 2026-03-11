@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // modificação: navegação para rota do filme
 import { getSentRecommendations } from "../../../../utils/api";
 
 function SentRecommendationsPanel() {
@@ -6,6 +7,7 @@ function SentRecommendationsPanel() {
   const [page, setPage] = useState(1);
 
   const PAGE_SIZE = 5;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -26,6 +28,13 @@ function SentRecommendationsPanel() {
 
   const visibleRecommendations = recommendations.slice(0, page * PAGE_SIZE);
   const hasMore = visibleRecommendations.length < recommendations.length;
+
+  const handleOpenMovieDetails = (movieId) => {
+    if (!movieId) return;
+
+    // modificação: abre diretamente a rota de detalhes do filme
+    navigate(`/movie/${movieId}`);
+  };
 
   return (
     <section className="sent-recommendations">
@@ -70,6 +79,14 @@ function SentRecommendationsPanel() {
               >
                 {rec.status === "read" ? "Assistido" : "Pendente"}
               </span>
+
+              <button
+                type="button"
+                className="sent-recommendations__view-btn"
+                onClick={() => handleOpenMovieDetails(rec.movie?.id)}
+              >
+                Ver detalhes
+              </button>
             </div>
           </div>
         ))}
