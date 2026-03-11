@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // modificação: navegação para rota do filme
+import { useNavigate } from "react-router-dom";
 import { getSentRecommendations } from "../../../../utils/api";
 
 function SentRecommendationsPanel() {
@@ -13,7 +13,6 @@ function SentRecommendationsPanel() {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
-      console.log("Token não encontrado");
       return;
     }
 
@@ -21,9 +20,7 @@ function SentRecommendationsPanel() {
       .then((data) => {
         setRecommendations(data);
       })
-      .catch((err) => {
-        console.log("Erro ao buscar recomendações enviadas:", err);
-      });
+      .catch(() => {});
   }, []);
 
   const visibleRecommendations = recommendations.slice(0, page * PAGE_SIZE);
@@ -32,7 +29,6 @@ function SentRecommendationsPanel() {
   const handleOpenMovieDetails = (movieId) => {
     if (!movieId) return;
 
-    // modificação: abre diretamente a rota de detalhes do filme
     navigate(`/movie/${movieId}`);
   };
 

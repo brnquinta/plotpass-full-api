@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // modificação: navegação para abrir detalhes do filme
+import { useNavigate } from "react-router-dom";
 import {
   getReceivedRecommendations,
   markRecommendationAsRead,
@@ -10,12 +10,11 @@ function RecommendationsPanel() {
   const [page, setPage] = useState(1);
 
   const PAGE_SIZE = 5;
-  const navigate = useNavigate(); // modificação: hook de navegação
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (!token) {
-      console.log("Token não encontrado");
       return;
     }
 
@@ -23,9 +22,7 @@ function RecommendationsPanel() {
       .then((data) => {
         setRecommendations(data);
       })
-      .catch((err) => {
-        console.log("Erro ao buscar recomendações:", err);
-      });
+      .catch(() => {});
   }, []);
 
   const visibleRecommendations = recommendations.slice(0, page * PAGE_SIZE);
@@ -35,7 +32,6 @@ function RecommendationsPanel() {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
-      console.log("Token não encontrado");
       return;
     }
 
@@ -52,13 +48,12 @@ function RecommendationsPanel() {
           })
         );
       })
-      .catch((err) => console.log("Erro ao marcar como lida:", err));
+      .catch(() => {});
   };
 
   const handleOpenMovieDetails = (movieId) => {
     if (!movieId) return;
 
-    // modificação: abre diretamente a rota de detalhes usando o id salvo na recomendação
     navigate(`/movie/${movieId}`);
   };
 

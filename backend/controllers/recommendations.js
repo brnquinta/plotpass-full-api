@@ -1,7 +1,6 @@
 const Recommendation = require("../models/recommendation");
 const User = require("../models/user");
 
-
 // GET /recommendations/received
 module.exports.getReceivedRecommendations = async (req, res, next) => {
   try {
@@ -67,18 +66,26 @@ module.exports.getRecommendationById = async (req, res, next) => {
 // POST /recommendations
 module.exports.createRecommendation = async (req, res, next) => {
   try {
-    console.log("=== CREATE RECOMMENDATION ===");
-    console.log("BODY:", req.body);
-    console.log("USER:", req.user);
-
     const { toUserEmail, reason, movie } = req.body;
+
+    if (!toUserEmail || !reason || !movie) {
+      return res.status(400).send({
+        message: "toUserEmail, reason e movie são obrigatórios",
+      });
+    }
+
+    if (!movie.id || !movie.title) {
+      return res.status(400).send({
+        message: "Os campos movie.id e movie.title são obrigatórios",
+      });
+    }
 
     const toUser = await User.findOne({ email: toUserEmail });
 
     if (!toUser) {
-      return res
-        .status(404)
-        .send({ message: "Usuário destinatário não encontrado" });
+      return res.status(404).send({
+        message: "Usuário destinatário não encontrado",
+      });
     }
 
     if (String(toUser._id) === String(req.user._id)) {
@@ -108,8 +115,6 @@ module.exports.createRecommendation = async (req, res, next) => {
 
     return res.status(201).send(populatedRecommendation);
   } catch (err) {
-    console.log("Erro createRecommendation:", err);
-
     if (err.name === "ValidationError") {
       return res.status(400).send({ message: "Erro de validação" });
     }
@@ -131,8 +136,9 @@ module.exports.markRecommendationAsRead = async (req, res, next) => {
       });
     }
 
-   recommendation.status =
-    recommendation.status === "pending" ? "read" : "pending";
+    recommendation.status =
+      recommendation.status === "pending" ? "read" : "pending";
+
     await recommendation.save();
 
     return res.send(recommendation);
@@ -143,6 +149,10 @@ module.exports.markRecommendationAsRead = async (req, res, next) => {
 
     if (err.name === "CastError") {
       return res.status(400).send({ message: "ID inválido" });
+    }
+
+    if (err.name === "ValidationError") {
+      return res.status(400).send({ message: "Erro de validação" });
     }
 
     return next(err);

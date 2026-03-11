@@ -9,27 +9,12 @@ function EditUserInfo({ user, onClose, onUpdate }) {
     event.preventDefault();
 
     const token = localStorage.getItem("jwt");
+    if (!token) return;
 
-    if (!token) {
-      console.log("Token não encontrado");
-      return;
-    }
-
-    updateUserProfile(token, {
-      name,
-      avatar,
-    })
+    updateUserProfile(token, { name, avatar })
       .then((data) => {
-        console.log("Perfil atualizado:", data);
-
-        if (onUpdate) {
-          onUpdate(data);
-        }
-
+        if (onUpdate) onUpdate(data);
         onClose();
-      })
-      .catch((err) => {
-        console.log("Erro ao atualizar perfil:", err);
       });
   };
 

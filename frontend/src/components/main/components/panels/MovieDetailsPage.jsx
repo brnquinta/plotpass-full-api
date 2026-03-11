@@ -19,8 +19,7 @@ function MovieDetailsPage() {
       .then((data) => {
         setMovie(data);
       })
-      .catch((err) => {
-        console.log("Erro ao buscar filme por ID:", err);
+      .catch(() => {
         setMovie(null);
       })
       .finally(() => {

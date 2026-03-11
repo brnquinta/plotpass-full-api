@@ -34,8 +34,8 @@ function Header({ onLogout }) {
       .then((data) => {
         setUser(data);
       })
-      .catch((err) => {
-        console.log("Erro /users/me:", err);
+      .catch(() => {
+  
         localStorage.removeItem("jwt");
         navigate("/login");
       });

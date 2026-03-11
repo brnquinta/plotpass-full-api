@@ -18,9 +18,7 @@ function Signup() {
       .then(() => {
         navigate("/login");
       })
-      .catch((err) => {
-        console.log("Signup error:", err);
-      });
+      .catch(() => {});
   };
 
   return (

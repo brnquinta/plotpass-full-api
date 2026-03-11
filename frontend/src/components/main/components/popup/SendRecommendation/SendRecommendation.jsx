@@ -11,7 +11,6 @@ function SendRecommendation({ movie, onClose }) {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
-      console.log("Token não encontrado");
       return;
     }
 
@@ -28,13 +27,10 @@ function SendRecommendation({ movie, onClose }) {
       reason: recommendation,
       movie: movieData,
     })
-      .then((data) => {
-        console.log("Recomendação enviada:", data);
+      .then(() => {
         onClose();
       })
-      .catch((err) => {
-        console.log("Erro ao enviar recomendação:", err);
-      });
+      .catch(() => {});
   };
 
   return (
