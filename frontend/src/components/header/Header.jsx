@@ -14,13 +14,14 @@ function Header({ onLogout }) {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt");
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
     if (!token) {
       navigate("/login");
       return;
     }
 
-    fetch("http://localhost:5000/users/me", {
+    fetch(`${API_URL}/users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -35,7 +36,6 @@ function Header({ onLogout }) {
         setUser(data);
       })
       .catch(() => {
-  
         localStorage.removeItem("jwt");
         navigate("/login");
       });
