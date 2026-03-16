@@ -9,7 +9,12 @@ import EditUserInfo from "../main/components/popup/EditUserInfo/EditUserInfo";
 
 function Header({ onLogout }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
   useEffect(() => {
@@ -17,6 +22,7 @@ function Header({ onLogout }) {
     const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
     if (!token) {
+      localStorage.removeItem("user");
       navigate("/login");
       return;
     }
@@ -34,9 +40,11 @@ function Header({ onLogout }) {
       })
       .then((data) => {
         setUser(data);
+        localStorage.setItem("user", JSON.stringify(data));
       })
       .catch(() => {
         localStorage.removeItem("jwt");
+        localStorage.removeItem("user");
         navigate("/login");
       });
   }, [navigate]);
@@ -51,10 +59,13 @@ function Header({ onLogout }) {
   };
 
   const handleUpdateUser = (updatedUser) => {
-    setUser((prev) => ({
-      ...prev,
+    const newUser = {
+      ...user,
       ...updatedUser,
-    }));
+    };
+
+    setUser(newUser);
+    localStorage.setItem("user", JSON.stringify(newUser));
   };
 
   return (
@@ -70,7 +81,7 @@ function Header({ onLogout }) {
               onClick={handleOpenEditProfile}
             >
               <img
-                src={user?.avatar || profileIcon}
+                src={user?.avatar ? user.avatar : profileIcon}
                 alt="Perfil do usuário"
                 className="header__profile-icon"
               />
