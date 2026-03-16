@@ -21,7 +21,7 @@ mongoose
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
-  "https://aroundfrontend-nine.vercel.app",
+  "https://plotpass-full-api.vercel.app",
 ];
 
 app.use(
