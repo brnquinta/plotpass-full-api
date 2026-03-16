@@ -11,19 +11,43 @@ const recommendationsRouter = require("./routes/recommendations");
 
 const app = express();
 
-mongoose.connect(process.env.MONGO_URL)
+/* conexão mongodb */
+mongoose
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB conectado"))
   .catch((err) => console.log(err));
 
-app.use(cors());
+/* CORS CONFIG */
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://aroundfrontend-nine.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("CORS não permitido"));
+    },
+  })
+);
+
 app.use(express.json());
 
+/* logs */
 app.use(requestLogger);
 
+/* rotas */
 app.use("/users", usersRouter);
 app.use("/recommendations", recommendationsRouter);
 
-/* Validadores / erros */
+/* erros */
 app.use(errorLogger);
 app.use(errorMiddleware);
 
