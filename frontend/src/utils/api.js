@@ -1,5 +1,6 @@
 // frontend/src/utils/api.js
-const BASE_URL = "http://localhost:5000";
+const BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function handleResponse(res) {
   return res.json().then((data) => {
@@ -76,21 +77,13 @@ export function getSentRecommendations(token) {
 }
 
 export function markRecommendationAsRead(token, recommendationId) {
-  return fetch(
-    `http://localhost:5000/recommendations/${recommendationId}/read`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  ).then((res) => {
-    if (!res.ok) {
-      return Promise.reject(`Erro: ${res.status}`);
-    }
-    return res.json();
-  });
+  return fetch(`${BASE_URL}/recommendations/${recommendationId}/read`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }).then(handleResponse);
 }
 
 export function updateUserProfile(token, data) {
