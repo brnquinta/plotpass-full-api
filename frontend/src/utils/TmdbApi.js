@@ -23,8 +23,6 @@ class TmdbApi {
     ).then((r) => this._handleServerResponse(r));
   }
 
-
-  // TMDB API helper
   getMovieById(movieId, language = "pt-BR") {
     return fetch(
       `${this._baseUrl}/movie/${movieId}?language=${language}`,
@@ -39,7 +37,7 @@ class TmdbApi {
 }
 
 const tmdbApi = new TmdbApi({
-  baseUrl: "https://api.themoviedb.org/3",
+  baseUrl: import.meta.env.VITE_TMDB_BASE_URL,
   headers: { accept: "application/json" },
 });
 
