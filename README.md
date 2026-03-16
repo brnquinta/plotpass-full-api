@@ -1,5 +1,7 @@
 # PlotPass
 
+Access URL: https://plotpass-full-api.vercel.app/
+
 PlotPass é uma aplicação web onde usuários podem buscar filmes e enviar recomendações para outros usuários.
 
 O projeto foi desenvolvido como aplicação fullstack, utilizando React no frontend e Node.js com Express no backend.
