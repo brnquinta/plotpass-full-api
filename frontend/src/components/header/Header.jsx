@@ -10,6 +10,7 @@ import EditUserInfo from "../main/components/popup/EditUserInfo/EditUserInfo";
 function Header({ onLogout }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
   useEffect(() => {
@@ -21,10 +22,14 @@ function Header({ onLogout }) {
       return;
     }
 
+    let isMounted = true;
+    setIsLoadingUser(true);
+
     fetch(`${API_URL}/users/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: "no-store",
     })
       .then((res) => {
         if (!res.ok) {
@@ -33,16 +38,29 @@ function Header({ onLogout }) {
         return res.json();
       })
       .then((data) => {
-        setUser(data);
+        if (isMounted) {
+          setUser(data);
+        }
       })
       .catch(() => {
-        localStorage.removeItem("jwt");
-        navigate("/login");
+        if (isMounted) {
+          localStorage.removeItem("jwt");
+          navigate("/login");
+        }
+      })
+      .finally(() => {
+        if (isMounted) {
+          setIsLoadingUser(false);
+        }
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
   const handleOpenEditProfile = () => {
-    if (!user) return;
+    if (!user || isLoadingUser) return;
     setIsEditProfileOpen(true);
   };
 
@@ -68,9 +86,10 @@ function Header({ onLogout }) {
               className="header__profile-button"
               type="button"
               onClick={handleOpenEditProfile}
+              disabled={isLoadingUser}
             >
               <img
-                src={user?.avatar || profileIcon}
+                src={!isLoadingUser && user?.avatar ? user.avatar : profileIcon}
                 alt="Perfil do usuário"
                 className="header__profile-icon"
               />
@@ -78,11 +97,11 @@ function Header({ onLogout }) {
 
             <ul className="header__profile-menu">
               <li className="header__user-name">
-                {user ? user.name : "Carregando..."}
+                {isLoadingUser ? "" : user?.name}
               </li>
 
               <li className="header__user-email">
-                {user ? user.email : ""}
+                {isLoadingUser ? "" : user?.email}
               </li>
 
               <li>
